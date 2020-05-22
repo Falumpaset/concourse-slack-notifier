@@ -1,5 +1,7 @@
 use serde::Serialize;
 
+extern crate rand;
+
 use rand::Rng;
 
 use crate::{AlertType, OutParams};
@@ -51,9 +53,9 @@ fn formatted_build_info_from_params(build_metadata: &BuildMetadata) -> Formatted
 
 fn find_random_string() -> String
 {
-    let mut pictures = vec!["https://1.bp.blogspot.com/-Av-RYG5DXLk/XU3nZMLR9yI/AAAAAAAATVA/16f5apNqph4q9K1Z_U6-J6IbnwUFI_togCLcBGAs/s640/rambo%2B3.jpg","https://1.bp.blogspot.com/-s2AlGmyUQmM/XU3m_5JgUBI/AAAAAAAATU4/jUj7T8eCgwk_cSubSLDpSj7EGNESfD9-gCLcBGAs/s640/rambo%2B2.webp", "https://static.kino.de/wp-content/uploads/2019/10/rambo-i-iii-1987-film-rcm1024x512u.jpg", "https://wegotthiscovered.com/wp-content/uploads/2018/05/rambo-1-670x335.jpg", "https://midnightmovietrain.files.wordpress.com/2014/09/rambo-iv-2.jpg"];
+    let  pictures = vec!["https://1.bp.blogspot.com/-Av-RYG5DXLk/XU3nZMLR9yI/AAAAAAAATVA/16f5apNqph4q9K1Z_U6-J6IbnwUFI_togCLcBGAs/s640/rambo%2B3.jpg","https://1.bp.blogspot.com/-s2AlGmyUQmM/XU3m_5JgUBI/AAAAAAAATU4/jUj7T8eCgwk_cSubSLDpSj7EGNESfD9-gCLcBGAs/s640/rambo%2B2.webp", "https://static.kino.de/wp-content/uploads/2019/10/rambo-i-iii-1987-film-rcm1024x512u.jpg", "https://wegotthiscovered.com/wp-content/uploads/2018/05/rambo-1-670x335.jpg", "https://midnightmovietrain.files.wordpress.com/2014/09/rambo-iv-2.jpg"];
     let mut rng = rand::thread_rng();
-    pictures[rng.gen_range(0, 5)]
+    pictures[rng.gen_range(0, 5)].to_string()
 
 }
 
