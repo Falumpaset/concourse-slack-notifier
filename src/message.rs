@@ -8,7 +8,7 @@ pub struct Message {
     pub color: String,
     pub text: Option<String>,
     pub icon_url: String,
-    pub image_url: Options<String>,
+    pub image_url: Option<String>,
 }
 
 struct FormattedBuildInfo {
