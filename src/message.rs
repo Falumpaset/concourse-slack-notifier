@@ -1,7 +1,5 @@
 use serde::Serialize;
 
-extern crate rand;
-
 use rand::Rng;
 
 use crate::{AlertType, OutParams};
