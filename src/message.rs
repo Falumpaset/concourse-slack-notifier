@@ -8,7 +8,7 @@ pub struct Message {
     pub color: String,
     pub text: Option<String>,
     pub icon_url: String,
-    pub image_url: Option<String>,
+    pub image_url: String,
 }
 
 struct FormattedBuildInfo {
@@ -96,7 +96,7 @@ impl Message {
                     "https://ci.concourse-ci.org/public/images/favicon-pending.png",
                 ),
                 text: None,
-                image_url: None,
+                image_url: String::from("abc"),
             },
         };
         if let Some(color) = params.color.as_ref() {
