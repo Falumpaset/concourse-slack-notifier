@@ -8,6 +8,7 @@ pub struct Message {
     pub color: String,
     pub text: Option<String>,
     pub icon_url: String,
+    pub image_url: String,
 }
 
 struct FormattedBuildInfo {
@@ -55,6 +56,7 @@ impl Message {
                     "https://ci.concourse-ci.org/public/images/favicon-succeeded.png",
                 ),
                 text: None,
+                image_url: String::from("https://1.bp.blogspot.com/-Av-RYG5DXLk/XU3nZMLR9yI/AAAAAAAATVA/16f5apNqph4q9K1Z_U6-J6IbnwUFI_togCLcBGAs/s640/rambo%2B3.jpg"),
             },
             AlertType::Failed | AlertType::Broke => Message {
                 color: String::from("#ed4b35"),
@@ -62,6 +64,7 @@ impl Message {
                     "https://ci.concourse-ci.org/public/images/favicon-failed.png",
                 ),
                 text: None,
+                image_url: String::from("https://1.bp.blogspot.com/-s2AlGmyUQmM/XU3m_5JgUBI/AAAAAAAATU4/jUj7T8eCgwk_cSubSLDpSj7EGNESfD9-gCLcBGAs/s640/rambo%2B2.webp"),
             },
             AlertType::Started => Message {
                 color: String::from("#fad43b"),
@@ -69,6 +72,7 @@ impl Message {
                     "https://ci.concourse-ci.org/public/images/favicon-started.png",
                 ),
                 text: None,
+                image_url: String::from("https://wegotthiscovered.com/wp-content/uploads/2018/05/rambo-1-670x335.jpg"),
             },
             AlertType::Aborted => Message {
                 color: String::from("#8b572a"),
@@ -76,6 +80,7 @@ impl Message {
                     "https://ci.concourse-ci.org/public/images/favicon-aborted.png",
                 ),
                 text: None,
+                image_url: String::from("https://static.kino.de/wp-content/uploads/2019/10/rambo-i-iii-1987-film-rcm1024x512u.jpg"),
             },
             AlertType::Errored => Message {
                 color: String::from("#f5a623"),
@@ -83,6 +88,7 @@ impl Message {
                     "https://ci.concourse-ci.org/public/images/favicon-errored.png",
                 ),
                 text: None,
+                image_url: String::from("https://midnightmovietrain.files.wordpress.com/2014/09/rambo-iv-2.jpg"),
             },
             AlertType::Custom => Message {
                 color: String::from("#35495c"),
@@ -90,6 +96,7 @@ impl Message {
                     "https://ci.concourse-ci.org/public/images/favicon-pending.png",
                 ),
                 text: None,
+                image_url: None,
             },
         };
         if let Some(color) = params.color.as_ref() {
@@ -158,6 +165,7 @@ impl Message {
                 color: Some(self.color),
                 footer: formatted_build_info.build_url,
                 footer_icon: Some(self.icon_url),
+                thumb_url: Some(self.image_url),
                 fields: match params.mode {
                     crate::Mode::Concise | crate::Mode::Normal => None,
                     crate::Mode::NormalWithInfo => Some(vec![
@@ -171,6 +179,7 @@ impl Message {
                             value: Some(formatted_build_info.build_number),
                             short: Some(true),
                         },
+
                     ]),
                 },
                 ..Default::default()
