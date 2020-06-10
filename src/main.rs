@@ -17,6 +17,10 @@ struct Version {
 struct Source {
     branch: String,
     url: String,
+    integration: String,
+    staging: String,
+    production: String,
+    hotfix: String,
     channel: Option<String>,
     concourse_url: Option<String>,
     #[serde(flatten)]
@@ -162,22 +166,22 @@ fn try_to_send(url: &str, message: &slack_push::Message) -> Result<(), String> {
     Ok(())
 }
 
-fn find_channel(branch: &str) -> String {
+fn find_channel(source: &Source) -> String {
 let mut s = String::new();
 
-    match branch {
+    match source.branch.as_str() {
         "integration" => {
-            s = String::from("im2_devops_stg");
+            s = (&source.integration).parse().unwrap();
         },
         "production" => {
-            s = String::from("im2_devops");
+            s = (&source.production).parse().unwrap();
         },
 
         "staging" => {
-            s = String::from("im2_devops_stg");
+            s = (&source.staging).parse().unwrap();
         },
         "hotfix" => {
-            s = String::from("im2_devops");
+            s = (&source.hotfix).parse().unwrap();
         }
         _ => {}
     }
@@ -227,7 +231,7 @@ impl Resource for SlackNotifier {
             let mut params = params.unwrap_or_default();
 
 
-                params.channel = Option::from(find_channel(source.branch.as_str()));
+                params.channel = Option::from(find_channel(&source));
 
 
             if source.debug.unwrap_or(false) {
