@@ -175,6 +175,9 @@ let mut s = String::new();
 
         "staging" => {
             s = String::from("im2_devops_stg");
+        },
+        "hotfix" => {
+            s = String::from("im2_devops");
         }
         _ => {}
     }
