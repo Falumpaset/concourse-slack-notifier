@@ -182,16 +182,16 @@ let mut s = String::new();
         },
         "hotfix" => {
             s = (&source.hotfix).parse().unwrap();
-        }
-        _ => {}
+        },
+        _ => {},
     }
     s
 }
 
 
 impl Resource for SlackNotifier {
-    type Source = Source;
     type Version = Version;
+    type Source = Source;
 
     type InParams = concourse_resource::Empty;
     type InMetadata = concourse_resource::Empty;
