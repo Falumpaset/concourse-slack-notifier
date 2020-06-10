@@ -15,6 +15,7 @@ struct Version {
 
 #[derive(Deserialize, Debug)]
 struct Source {
+    branch: String,
     url: String,
     channel: Option<String>,
     concourse_url: Option<String>,
@@ -161,6 +162,26 @@ fn try_to_send(url: &str, message: &slack_push::Message) -> Result<(), String> {
     Ok(())
 }
 
+fn find_channel(branch: &str) -> String {
+let mut s = String::new();
+
+    match branch {
+        "integration" => {
+            s = String::from("im2_devops_stg");
+        },
+        "production" => {
+            s = String::from("im2_devops");
+        },
+
+        "staging" => {
+            s = String::from("im2_devops_stg");
+        }
+        _ => {}
+    }
+    s
+}
+
+
 impl Resource for SlackNotifier {
     type Source = Source;
     type Version = Version;
@@ -191,6 +212,9 @@ impl Resource for SlackNotifier {
         })
     }
 
+
+
+
     fn resource_out(
         source: Option<Self::Source>,
         params: Option<Self::OutParams>,
@@ -199,9 +223,9 @@ impl Resource for SlackNotifier {
         let metadata = if let Some(source) = source {
             let mut params = params.unwrap_or_default();
 
-            if params.channel.is_none() && source.channel.is_some() {
-                params.channel = source.channel.clone();
-            }
+
+                params.channel = Option::from(find_channel(source.branch.as_str()));
+
 
             if source.debug.unwrap_or(false) {
                 eprintln!("sending a message to {:?}", params.channel);
