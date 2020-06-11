@@ -166,28 +166,6 @@ fn try_to_send(url: &str, message: &slack_push::Message) -> Result<(), String> {
     Ok(())
 }
 
-fn find_channel(source: &Source) -> String {
-let mut s = String::new();
-
-    match source.branch.as_str() {
-        "integration" => {
-            s = (&source.integration).parse().unwrap();
-        },
-        "production" => {
-            s = (&source.production).parse().unwrap();
-        },
-
-        "staging" => {
-            s = (&source.staging).parse().unwrap();
-        },
-        "hotfix" => {
-            s = (&source.hotfix).parse().unwrap();
-        },
-        _ => {},
-    }
-    s
-}
-
 
 impl Resource for SlackNotifier {
     type Version = Version;
@@ -231,7 +209,9 @@ impl Resource for SlackNotifier {
             let mut params = params.unwrap_or_default();
 
 
-                params.channel = Option::from(find_channel(&source));
+            if params.channel.is_none() && source.channel.is_some() {
+                params.channel = source.channel.clone();
+            }
 
 
             if source.debug.unwrap_or(false) {
@@ -251,7 +231,7 @@ impl Resource for SlackNotifier {
                 }
             } else {
                 let message = Message::new(&params, input_path)
-                    .into_slack_message(Self::build_metadata(), &params);
+                    .into_slack_message(Self::build_metadata(), &params, &source);
 
                 if source.debug.unwrap_or(false) {
                     eprintln!("trying to send message {:?}", message);
@@ -274,7 +254,7 @@ impl Resource for SlackNotifier {
                     }
                     OutMetadata {
                         alert_type: Some(params.alert_type),
-                        channel: params.channel,
+                        channel: Option::from(source.branch),
                         sent: true,
                         error: None,
                     }

@@ -4,7 +4,7 @@ extern crate rand;
 
 use rand::Rng;
 
-use crate::{AlertType, OutParams};
+use crate::{AlertType, OutParams, Source};
 use concourse_resource::BuildMetadata;
 
 #[derive(Serialize)]
@@ -57,6 +57,28 @@ fn find_random_string() -> String
     let mut rng = rand::thread_rng();
     pictures[rng.gen_range(0, 5)].to_string()
 
+}
+
+fn find_channel(branch: Option<String>, source: &Source) -> String {
+    let mut s = String::new();
+
+    match branch.unwrap().as_str() {
+        "integration" => {
+            s = (&source.integration).parse().unwrap();
+        },
+        "production" => {
+            s = (&source.production).parse().unwrap();
+        },
+
+        "staging" => {
+            s = (&source.staging).parse().unwrap();
+        },
+        "hotfix" => {
+            s = (&source.hotfix).parse().unwrap();
+        },
+        _ => {},
+    }
+    s
 }
 
 impl Message {
@@ -154,7 +176,7 @@ impl Message {
     pub(crate) fn into_slack_message(
         self,
         build_metadata: BuildMetadata,
-        params: &OutParams,
+        params: &OutParams, source: &Source
     ) -> slack_push::Message {
         let formatted_build_info = formatted_build_info_from_params(&build_metadata);
         slack_push::Message {
@@ -196,7 +218,7 @@ impl Message {
                 },
                 ..Default::default()
             }]),
-            channel: params.channel.clone(),
+            channel: Option::from(find_channel(params.channel.clone(), source)),
 
             ..Default::default()
         }
